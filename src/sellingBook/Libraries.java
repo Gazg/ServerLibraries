@@ -111,8 +111,11 @@ public class Libraries extends UnicastRemoteObject implements ILibraries{
 
 	@Override
 	public List<IBook> getBooksThatContain(String title) throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<IBook> books = new ArrayList<IBook>();
+		for(ILibrary lib : libraries){
+			books.addAll(lib.getBooksThatContain(title));
+		}
+		return books;
 	}
 
 
