@@ -40,6 +40,7 @@ public class Libraries extends UnicastRemoteObject implements ILibraries{
 
 	@Override
 	public IBook getBook(Long ISBN) throws RemoteException {
+		System.out.println("get book");
 		IBook book;
 		for(ILibrary lib : libraries){
 			book =  lib.getBook(ISBN);
@@ -93,21 +94,45 @@ public class Libraries extends UnicastRemoteObject implements ILibraries{
 
 	@Override
 	public void addBook(IBook book) throws RemoteException {
-		if(index >=libraries.size()){
-			index =0;
+		int min = libraries.get(0).NbLivre();
+		ILibrary libMin= null;
+		for (ILibrary iLibrary : libraries) {
+			if(iLibrary.contains(book.getISBN())){
+				iLibrary.addBook(book);
+				return;
+			}
+			int Nblivre = iLibrary.NbLivre();
+			if(Nblivre < min){
+				min=Nblivre;
+				libMin=iLibrary;
+			}
+			
 		}
-		libraries.get(index).addBook(book);
-		index++;
+		libMin.addBook(book);
 	}
 
 	@Override
-	public void addBook(Long isbn, String title, String author,Double price) throws RemoteException{
-		if(index >=libraries.size()){
-			index =0;
+	public void addBook(Long isbn, String title, String author,Double price, Integer NbExemplaire) throws RemoteException{
+		System.out.println("Add book a la con");
+		int min = libraries.get(0).NbLivre();
+		ILibrary libMin= null;
+		for (ILibrary iLibrary : libraries) {
+			System.out.println(iLibrary.contains(isbn));
+			if(iLibrary.contains(isbn)){
+				System.out.println("contains");
+				iLibrary.addBook(isbn, title, author, price, NbExemplaire);
+				return;
+			}
+			int Nblivre = iLibrary.NbLivre();
+			if(Nblivre <= min){
+				min=Nblivre;
+				libMin=iLibrary;
+			}
 		}
-		libraries.get(index).addBook(isbn,title,author,price);
-		index++;
+		libMin.addBook(isbn, title, author, price, NbExemplaire);
 	}
+	
+	
 
 	@Override
 	public List<IBook> getBooksThatContain(String title) throws RemoteException {
@@ -117,6 +142,8 @@ public class Libraries extends UnicastRemoteObject implements ILibraries{
 		}
 		return books;
 	}
+
+
 
 
 }
