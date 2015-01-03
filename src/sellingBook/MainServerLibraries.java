@@ -3,6 +3,7 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RMISecurityManager;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
 
 import sellingBook.interfaceRMI.ILibraries;
 
@@ -17,6 +18,7 @@ public class MainServerLibraries {
 		if (System.getSecurityManager() == null) {
 			System.setSecurityManager(new RMISecurityManager());
 		}
+		LocateRegistry.createRegistry(1099);
 		ILibraries lib = new Libraries();
 		Naming.rebind("rmi://localhost/Libraries", lib);
 	}
